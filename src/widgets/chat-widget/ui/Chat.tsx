@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, use, useEffect, useState } from 'react';
 
 import { ChatRequestOptions } from 'ai';
 
@@ -29,21 +29,9 @@ export default function Chat() {
 export { Chat };
 
 const ChatOutput = ({ messages, response }: { messages: Message[], response: string }) => {
-
-    // const processedMessages = messages.map((m) => {
-    //     let codeBlockContent: string | null = null;
-    //     try {
-    //         codeBlockContent = extractOneBlockFromMarkdown(response.content).content;
-    //     }
-    //     catch (e) {
-    //         // console.error(e);
-    //     }
-    //     return { ...m, codeBlockContent };
-    // });
-    // useEffect(() => {
-    //     const codeBlockContent = extractOneBlockFromMarkdown(response.content).content;
-    //     setCodeBlockContent(codeBlockContent);
-    // }, [response]);
+    useEffect(() => {
+        console.log(response);
+    }, [response]);
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
@@ -53,7 +41,7 @@ const ChatOutput = ({ messages, response }: { messages: Message[], response: str
                             {m.role === 'user' ? 'User: ' : 'Crystal: '}
                         </p>
                         {m.role === 'user' ?
-                            <p className='pl-4'>{m.content}</p>
+                            <div className='pl-4'>{m.content}</div>
                             :
                             <>
                                 {response && < Mermaid chart={response} />}
