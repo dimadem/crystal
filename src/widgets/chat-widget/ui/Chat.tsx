@@ -19,7 +19,6 @@ export default function Chat() {
         }
     })
     // extractOneBlockFromMarkdown(response.content).content
-    console.log('response', response);
     return (
         <>
             <ChatOutput messages={messages} response={response} isLoading={isLoading} />
@@ -29,7 +28,7 @@ export default function Chat() {
 }
 export { Chat };
 
-const ChatOutput = ({ messages, response, isLoading }: { messages: Message[], response: string, isLoading: boolean }) => {
+const ChatOutput = ({ messages, response, isLoading }: { messages: Message[], response: Message, isLoading: boolean }) => {
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
@@ -44,11 +43,13 @@ const ChatOutput = ({ messages, response, isLoading }: { messages: Message[], re
                             <>
 
                                 {isLoading ?
-                                    <div>{m.content}</div>
-                                    :
-
-                                    response && (<Mermaid chart={response} />)
-                                }
+                                    <div>
+                                        {m.content}
+                                    </div>
+                                    : response &&
+                                    (
+                                        <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />
+                                    )}
                             </>
                         }
 
