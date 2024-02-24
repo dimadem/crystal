@@ -28,9 +28,8 @@ export default function Chat() {
 export { Chat };
 
 const ChatOutput = ({ messages, response }: { messages: Message[], response: string }) => {
-    useEffect(() => {
-        console.log(response);
-    }, [response]);
+    console.log(response);
+
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
@@ -45,7 +44,8 @@ const ChatOutput = ({ messages, response }: { messages: Message[], response: str
                             <>
 
                                 {response ?
-                                    <div>{m.content}</div> :
+                                    <div>{m.content}</div>
+                                    :
                                     <Mermaid chart={response} />
                                 }
                             </>
