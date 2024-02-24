@@ -1,16 +1,17 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 import { ChatRequestOptions } from 'ai';
 import { type Message, useChat } from 'ai/react';
 import { Button, ScrollArea, Input } from '@/shared/ui';
 import { extractOneBlockFromMarkdown } from '@/shared/lib/extractOneBlockFromMarkdown';
 import { Mermaid } from '@/entities/mermaid-parser';
+import { TIMEOUT } from 'dns';
 
 export default function Chat() {
     const [response, setResponse] = useState<Message>(null!);
-    const { input, messages, handleInputChange, handleSubmit, isLoading } = useChat({
+    const { input, messages, handleInputChange, handleSubmit } = useChat({
         api: '/api/chat',
         onFinish: (response: Message) => {
             setResponse(response);
@@ -29,6 +30,14 @@ export { Chat };
 const ChatOutput = ({ messages, response }:
     { messages: Message[], response: Message }
 ) => {
+    const [data, setData] = useState<string>('');
+    useEffect(() => {
+        setTimeout(() => {
+            const data = extractOneBlockFromMarkdown(response.content).content.toString();
+            setData(data);
+        }, 4000);
+    }, [response]);
+
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
@@ -42,11 +51,10 @@ const ChatOutput = ({ messages, response }:
                             :
                             <>
                                 {response &&
-                                    <Mermaid chart={extractOneBlockFromMarkdown(response.content).content.toString()} />
+                                    <Mermaid chart={data} />
                                 }
                             </>
                         }
-
                     </li>
                 ))}
             </ul>
