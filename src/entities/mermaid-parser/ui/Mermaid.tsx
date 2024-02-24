@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import mermaid from "mermaid";
 
 mermaid.initialize({
@@ -10,16 +10,14 @@ mermaid.initialize({
 
 type MermaidProps = {
     chart: string;
-
 };
 
-class Mermaid extends React.Component<MermaidProps> {
-    componentDidMount() {
+const Mermaid = memo((props: MermaidProps) => {
+    React.useEffect(() => {
         mermaid.contentLoaded();
-    }
-    render() {
-        return <div className="mermaid">{this.props.chart}</div>;
-    }
-}
+    }, []);
+
+    return <div className="mermaid">{props.chart}</div>;
+});
 
 export { Mermaid };
