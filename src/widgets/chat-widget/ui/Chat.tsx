@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, use, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { ChatRequestOptions } from 'ai';
 
@@ -14,7 +14,7 @@ export default function Chat() {
     const [response, setResponse] = useState<string>(null!);
     const { input, messages, handleInputChange, handleSubmit, isLoading } = useChat({
         api: '/api/chat',
-        onFinish: (response: Message) => {
+        onFinish: (response) => {
             setResponse(extractOneBlockFromMarkdown(response.content).content);
         }
     })
