@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useState, } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { ChatRequestOptions } from 'ai';
 
@@ -11,18 +11,14 @@ import { extractOneBlockFromMarkdown } from '@/shared/lib/extractOneBlockFromMar
 import { Mermaid } from '@/entities/mermaid-parser';
 
 export default function Chat() {
-    const [response, setResponse] = useState<Message | null>(null);
-    const { messages, input, handleInputChange, handleSubmit } = useChat({
+    const [response, setResponse] = useState<string>(null!);
+    const { input, messages, handleInputChange, handleSubmit } = useChat({
         api: '/api/chat',
         onFinish: (response: Message) => {
-            setResponse(response);
+            setResponse(extractOneBlockFromMarkdown(response.content).content);
+            console.log(response);
         }
     })
-
-    console.log("response -> ", response);
-    if (!response) return (
-        <ChatInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit} />
-    );
     return (
         <>
             <ChatOutput messages={messages} response={response} />
@@ -32,7 +28,8 @@ export default function Chat() {
 }
 export { Chat };
 
-const ChatOutput = ({ messages, response }: { messages: Message[], response: Message }) => {
+const ChatOutput = ({ messages, response }: { messages: Message[], response: string }) => {
+
     // const processedMessages = messages.map((m) => {
     //     let codeBlockContent: string | null = null;
     //     try {
@@ -43,20 +40,26 @@ const ChatOutput = ({ messages, response }: { messages: Message[], response: Mes
     //     }
     //     return { ...m, codeBlockContent };
     // });
-
-    const codeBlockContent = extractOneBlockFromMarkdown(response.content).content;
-
+    // useEffect(() => {
+    //     const codeBlockContent = extractOneBlockFromMarkdown(response.content).content;
+    //     setCodeBlockContent(codeBlockContent);
+    // }, [response]);
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
                 {messages.map((m, index) => (
                     <li key={index} className='w-full p-4 bg-gray-100'>
                         <p className='bg-black text-white pl-4'>
-                            {m.role === 'user' ? 'User: ' : 'AI: '}
+                            {m.role === 'user' ? 'User: ' : 'Crystal: '}
                         </p>
-                        <p className='text-wrap px-2'>
-                            <Mermaid chart={codeBlockContent} />
-                        </p>
+                        {m.role === 'user' ?
+                            <p className='pl-4'>{m.content}</p>
+                            :
+                            <>
+                                {response && < Mermaid chart={response} />}
+                            </>
+                        }
+
                     </li>
                 ))}
             </ul>
