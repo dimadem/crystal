@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, } from 'react';
+import { ChangeEvent, FormEvent, useState, } from 'react';
 
 import { ChatRequestOptions } from 'ai';
 
@@ -11,39 +11,51 @@ import { extractOneBlockFromMarkdown } from '@/shared/lib/extractOneBlockFromMar
 import { Mermaid } from '@/entities/mermaid-parser';
 
 export default function Chat() {
+    const [response, setResponse] = useState<Message | null>(null);
     const { messages, input, handleInputChange, handleSubmit } = useChat({
-        api: '/api/chat'
+        api: '/api/chat',
+        onFinish: (response: Message) => {
+            setResponse(response);
+        }
     })
 
-    console.log("all messages -> ", messages);
+    console.log("response -> ", response);
+    if (!response) return (
+        <ChatInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit} />
+    );
     return (
         <>
-            <ChatOutput messages={messages} />
+            <ChatOutput messages={messages} response={response} />
             <ChatInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit} />
         </>
     )
 }
 export { Chat };
 
-const ChatOutput = ({ messages }: { messages: Message[] }) => {
-    const processedMessages = messages.map((m) => {
-        const codeBlockContent: string | null = extractOneBlockFromMarkdown(m.content)
-        return { ...m, codeBlockContent };
-    });
+const ChatOutput = ({ messages, response }: { messages: Message[], response: Message }) => {
+    // const processedMessages = messages.map((m) => {
+    //     let codeBlockContent: string | null = null;
+    //     try {
+    //         codeBlockContent = extractOneBlockFromMarkdown(response.content).content;
+    //     }
+    //     catch (e) {
+    //         // console.error(e);
+    //     }
+    //     return { ...m, codeBlockContent };
+    // });
+
+    const codeBlockContent = extractOneBlockFromMarkdown(response.content).content;
 
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
-                {processedMessages.map((m, index) => (
+                {messages.map((m, index) => (
                     <li key={index} className='w-full p-4 bg-gray-100'>
                         <p className='bg-black text-white pl-4'>
                             {m.role === 'user' ? 'User: ' : 'AI: '}
                         </p>
                         <p className='text-wrap px-2'>
-                            {!m.codeBlockContent ?
-                                m.content :
-                                <Mermaid chart={m.codeBlockContent} />
-                            }
+                            <Mermaid chart={codeBlockContent} />
                         </p>
                     </li>
                 ))}
