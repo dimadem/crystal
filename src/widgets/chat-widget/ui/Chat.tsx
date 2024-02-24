@@ -11,13 +11,14 @@ import { extractOneBlockFromMarkdown } from '@/shared/lib/extractOneBlockFromMar
 import { Mermaid } from '@/entities/mermaid-parser';
 
 export default function Chat() {
-    const [response, setResponse] = useState<string>(null!);
+    const [response, setResponse] = useState<Message>(null!);
     const { input, messages, handleInputChange, handleSubmit, isLoading } = useChat({
         api: '/api/chat',
-        onFinish: (response) => {
-            setResponse(extractOneBlockFromMarkdown(response.content).content);
+        onFinish: (response: Message) => {
+            setResponse(response);
         }
     })
+    // extractOneBlockFromMarkdown(response.content).content
     console.log('response', response);
     return (
         <>
