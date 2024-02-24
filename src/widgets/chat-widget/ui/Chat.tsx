@@ -16,7 +16,6 @@ export default function Chat() {
         api: '/api/chat',
         onFinish: (response: Message) => {
             setResponse(extractOneBlockFromMarkdown(response.content).content);
-            console.log(response);
         }
     })
     return (
