@@ -30,14 +30,12 @@ export { Chat };
 const ChatOutput = ({ messages, response }:
     { messages: Message[], response: Message }
 ) => {
-    const [data, setData] = useState<string>('');
+    const [data, setData] = useState<string>();
     useEffect(() => {
-        setTimeout(() => {
-            const data = extractOneBlockFromMarkdown(response.content).content.toString();
-            setData(data);
-        }, 4000);
+        if (response && response.content) {
+            setData(extractOneBlockFromMarkdown(response.content).content);
+        }
     }, [response]);
-
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
@@ -50,7 +48,7 @@ const ChatOutput = ({ messages, response }:
                             <div className='pl-4'>{m.content}</div>
                             :
                             <>
-                                {response &&
+                                {data &&
                                     <Mermaid chart={data} />
                                 }
                             </>
