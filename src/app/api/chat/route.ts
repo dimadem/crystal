@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
 
     const response = await anthropic.messages.create({
-        model: 'claude-2.0',
+        model: 'claude-2.1',
         stream: true,
         messages: [{ role: 'user', content: createPrompt(messages[messages.length - 1].content) }],
         max_tokens: 200,

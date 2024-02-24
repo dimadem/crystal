@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent, } from 'react';
 
 import { ChatRequestOptions } from 'ai';
 
@@ -27,13 +27,7 @@ export { Chat };
 
 const ChatOutput = ({ messages }: { messages: Message[] }) => {
     const processedMessages = messages.map((m) => {
-        let codeBlockContent: string | null = null;
-        try {
-            codeBlockContent = extractOneBlockFromMarkdown(m.content).content;
-        }
-        catch (e) {
-            console.error(e);
-        }
+        const codeBlockContent: string | null = extractOneBlockFromMarkdown(m.content)
         return { ...m, codeBlockContent };
     });
 

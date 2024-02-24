@@ -287,6 +287,4 @@ export const createPrompt = (message: string) => spaceTrim((block) => `
     ## Request from user
 
     ${block(message)}
-
-
 `);
