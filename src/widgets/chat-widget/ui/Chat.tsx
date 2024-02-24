@@ -26,29 +26,33 @@ export default function Chat() {
 export { Chat };
 
 const ChatOutput = ({ messages }: { messages: Message[] }) => {
+    const processedMessages = messages.map((m) => {
+        let codeBlockContent: string | null = null;
+        try {
+            codeBlockContent = extractOneBlockFromMarkdown(m.content).content;
+        }
+        catch (e) {
+            console.error(e);
+        }
+        return { ...m, codeBlockContent };
+    });
+
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
-                {messages.map((m, index) => {
-                    let codeBlockContent: string | null = null;
-                    try {
-                        codeBlockContent = extractOneBlockFromMarkdown(m.content).content;
-                    } catch (error) {
-                        console.log("error -> ", error);
-                    }
-                    return (
-                        <li key={index} className='w-full p-4 bg-gray-100'>
-                            <p className='bg-black text-white pl-4'>
-                                {m.role === 'user' ? 'User: ' : 'AI: '}</p>
-                            <p className='text-wrap px-2'>
-                                {!codeBlockContent ?
-                                    m.content :
-                                    <Mermaid chart={codeBlockContent} />
-                                }
-                            </p>
-                        </li>
-                    )
-                })}
+                {processedMessages.map((m, index) => (
+                    <li key={index} className='w-full p-4 bg-gray-100'>
+                        <p className='bg-black text-white pl-4'>
+                            {m.role === 'user' ? 'User: ' : 'AI: '}
+                        </p>
+                        <p className='text-wrap px-2'>
+                            {!m.codeBlockContent ?
+                                m.content :
+                                <Mermaid chart={m.codeBlockContent} />
+                            }
+                        </p>
+                    </li>
+                ))}
             </ul>
         </ScrollArea>
     )

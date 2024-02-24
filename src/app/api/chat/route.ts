@@ -16,20 +16,23 @@ export async function POST(req: Request) {
     // Extract the `messages` from the body of the request
     const { messages } = await req.json();
 
+    // // Request the Anthropic API for the response based on the prompt
+    // const actualMessage = messages.map(() => {
+    //     return { role: 'user', content: createPrompt(messages[messages.length - 1].content) };
+    // });
 
 
-    // Request the Anthropic API for the response based on the prompt
     const response = await anthropic.messages.create({
         model: 'claude-2.0',
         stream: true,
-        messages: [
-            // { role: 'assistant', content: prompt },
-            { role: 'user', content: createPrompt(messages[0].content) }],
+        messages: [{ role: 'user', content: createPrompt(messages[messages.length - 1].content) }],
         max_tokens: 200,
         temperature: 0,
         top_k: 1,
         top_p: 1
     })
+
+
 
     // Convert the response into a friendly text-stream
     const stream = AnthropicStream(response)
