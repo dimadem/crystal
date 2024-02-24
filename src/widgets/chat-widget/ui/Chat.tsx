@@ -12,7 +12,7 @@ import { Mermaid } from '@/entities/mermaid-parser';
 
 export default function Chat() {
     const [response, setResponse] = useState<string>(null!);
-    const { input, messages, handleInputChange, handleSubmit } = useChat({
+    const { input, messages, handleInputChange, handleSubmit, isLoading } = useChat({
         api: '/api/chat',
         onFinish: (response: Message) => {
             setResponse(extractOneBlockFromMarkdown(response.content).content);
@@ -21,14 +21,14 @@ export default function Chat() {
     console.log('response', response);
     return (
         <>
-            <ChatOutput messages={messages} response={response} />
+            <ChatOutput messages={messages} response={response} isLoading={isLoading} />
             <ChatInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit} />
         </>
     )
 }
 export { Chat };
 
-const ChatOutput = ({ messages, response }: { messages: Message[], response: string }) => {
+const ChatOutput = ({ messages, response, isLoading }: { messages: Message[], response: string, isLoading: boolean }) => {
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
@@ -42,10 +42,11 @@ const ChatOutput = ({ messages, response }: { messages: Message[], response: str
                             :
                             <>
 
-                                {response ?
+                                {isLoading ?
                                     <div>{m.content}</div>
                                     :
-                                    <Mermaid chart={response} />
+
+                                    response && (<Mermaid chart={response} />)
                                 }
                             </>
                         }
