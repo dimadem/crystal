@@ -13,10 +13,10 @@ export function extractOneBlockFromMarkdown(markdown: string): { language: strin
     const codeBlocks = extractAllBlocksFromMarkdown(markdown);
 
 
-    if (codeBlocks.length !== 1) {
-        // TODO: Report more specific place where the error happened
-        throw new Error('There should be exactly one code block in the markdown');
-    }
+    // if (codeBlocks.length !== 1) {
+    //     // TODO: Report more specific place where the error happened
+    //     throw new Error('There should be exactly one code block in the markdown');
+    // }
 
     return codeBlocks[0]!;
 }
