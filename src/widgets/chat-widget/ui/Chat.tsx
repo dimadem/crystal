@@ -43,7 +43,11 @@ const ChatOutput = ({ messages, response }: { messages: Message[], response: str
                             <div className='pl-4'>{m.content}</div>
                             :
                             <>
-                                {response && < Mermaid chart={response} />}
+
+                                {response ?
+                                    <div>{m.content}</div> :
+                                    <Mermaid chart={response} />
+                                }
                             </>
                         }
 
