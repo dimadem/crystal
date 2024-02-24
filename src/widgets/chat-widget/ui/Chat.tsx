@@ -3,9 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { ChatRequestOptions } from 'ai';
-
 import { type Message, useChat } from 'ai/react';
-
 import { Button, ScrollArea, Input } from '@/shared/ui';
 import { extractOneBlockFromMarkdown } from '@/shared/lib/extractOneBlockFromMarkdown';
 import { Mermaid } from '@/entities/mermaid-parser';
@@ -28,7 +26,9 @@ export default function Chat() {
 }
 export { Chat };
 
-const ChatOutput = ({ messages, response, isLoading }: { messages: Message[], response: Message, isLoading: boolean }) => {
+const ChatOutput = ({ messages, response, isLoading }:
+    { messages: Message[], response: Message, isLoading: boolean }
+) => {
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
@@ -41,15 +41,10 @@ const ChatOutput = ({ messages, response, isLoading }: { messages: Message[], re
                             <div className='pl-4'>{m.content}</div>
                             :
                             <>
-
-                                {isLoading ?
-                                    <div>
-                                        {m.content}
-                                    </div>
-                                    : response &&
-                                    (
-                                        <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />
-                                    )}
+                                {isLoading == true ?
+                                    <div>{m.content}</div> :
+                                    <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />
+                                }
                             </>
                         }
 
