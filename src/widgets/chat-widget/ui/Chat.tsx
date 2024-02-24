@@ -41,8 +41,7 @@ const ChatOutput = ({ messages, response, isLoading }:
                             <div className='pl-4'>{m.content}</div>
                             :
                             <>
-                                {isLoading == true ?
-                                    <div>{m.content}</div> :
+                                {response &&
                                     <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />
                                 }
                             </>
