@@ -18,6 +18,7 @@ export default function Chat() {
             setResponse(extractOneBlockFromMarkdown(response.content).content);
         }
     })
+    console.log('response', response);
     return (
         <>
             <ChatOutput messages={messages} response={response} />
@@ -28,8 +29,6 @@ export default function Chat() {
 export { Chat };
 
 const ChatOutput = ({ messages, response }: { messages: Message[], response: string }) => {
-    console.log(response);
-
     return (
         <ScrollArea className='min-h-full w-full'>
             <ul className=''>
