@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Chat } from "@/widgets/chat-widget";
 
-const MindmapPage = () => {
+const KnetworkPage = () => {
     return (
         <>
             <Chat />
@@ -13,4 +13,4 @@ const MindmapPage = () => {
 
 };
 
-export default MindmapPage;
+export default KnetworkPage;
