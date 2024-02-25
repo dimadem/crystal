@@ -22,6 +22,4 @@ const Mermaid = (props: MermaidProps) => {
     return <div className="mermaid">{props.chart}</div>;
 };
 
-Mermaid.displayName = "Mermaid";
-
 export { Mermaid };

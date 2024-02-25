@@ -37,9 +37,15 @@ const ChatOutput = ({ messages, response }:
     //         setData(extractOneBlockFromMarkdown(response.content).content);
     //     }
     // }, [response]);
+    if (response) {
+        return (
+            <ScrollArea className='min-h-full w-full'>
+                <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />
+            </ScrollArea>
+        )
+    }
     return (
         <ScrollArea className='min-h-full w-full'>
-            {response && <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />}
             <ul className=''>
                 {messages.map((m, index) => (
                     <li key={index} className='w-full p-4 bg-gray-100'>
