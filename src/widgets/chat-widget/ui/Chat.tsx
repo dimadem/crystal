@@ -9,14 +9,13 @@ import { extractOneBlockFromMarkdown } from '@/shared/lib/extractOneBlockFromMar
 import { Mermaid } from '@/entities/mermaid-parser';
 
 export default function Chat() {
-    const [response, setResponse] = useState<Message>(null!);
+    const [response, setResponse] = useState<string>(null!);
     const { input, messages, handleInputChange, handleSubmit, isLoading } = useChat({
         api: '/api/chat',
         onFinish: (response: Message) => {
-            setResponse(response);
+            setResponse(extractOneBlockFromMarkdown(response.content).content);
         }
-    })
-    // extractOneBlockFromMarkdown(response.content).content
+    });
     return (
         <>
             <ChatOutput messages={messages} response={response} isLoading={isLoading} />
@@ -27,7 +26,7 @@ export default function Chat() {
 export { Chat };
 
 const ChatOutput = ({ messages, response, isLoading }:
-    { messages: Message[], response: Message, isLoading: boolean }
+    { messages: Message[], response: string, isLoading: boolean }
 ) => {
     // const data = useExtractCodeBlocksFromMarkdown(response?.content);
     // const [data, setData] = useState<string>();
@@ -37,10 +36,10 @@ const ChatOutput = ({ messages, response, isLoading }:
     //         setData(extractOneBlockFromMarkdown(response.content).content);
     //     }
     // }, [response]);
-    if (response && response.content && !isLoading) {
+    if (response && !isLoading) {
         return (
             <ScrollArea className='min-h-full w-full'>
-                <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />
+                <Mermaid chart={response} />
             </ScrollArea>
         )
     }
