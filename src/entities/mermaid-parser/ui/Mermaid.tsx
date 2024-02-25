@@ -2,23 +2,25 @@ import React, { memo } from "react";
 import mermaid from "mermaid";
 
 mermaid.initialize({
-    startOnLoad: true,
+    startOnLoad: false,
     theme: 'default',
     securityLevel: 'loose',
     fontFamily: 'monospace',
+
 });
 
 type MermaidProps = {
     chart: string;
 };
 
-const Mermaid = memo((props: MermaidProps) => {
+const Mermaid = (props: MermaidProps) => {
     React.useEffect(() => {
-        mermaid.contentLoaded();
-    }, []);
+        if (props.chart) mermaid.contentLoaded();
+        mermaid.run();
+    }, [props.chart]);
 
     return <div className="mermaid">{props.chart}</div>;
-});
+};
 
 Mermaid.displayName = "Mermaid";
 

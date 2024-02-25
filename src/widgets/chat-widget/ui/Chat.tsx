@@ -1,13 +1,12 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { ChatRequestOptions } from 'ai';
 import { type Message, useChat } from 'ai/react';
 import { Button, ScrollArea, Input } from '@/shared/ui';
 import { extractOneBlockFromMarkdown } from '@/shared/lib/extractOneBlockFromMarkdown';
 import { Mermaid } from '@/entities/mermaid-parser';
-import { TIMEOUT } from 'dns';
 
 export default function Chat() {
     const [response, setResponse] = useState<Message>(null!);
@@ -30,29 +29,31 @@ export { Chat };
 const ChatOutput = ({ messages, response }:
     { messages: Message[], response: Message }
 ) => {
-    const [data, setData] = useState<string>();
-    useEffect(() => {
-        if (response && response.content) {
-            setData(extractOneBlockFromMarkdown(response.content).content);
-        }
-    }, [response]);
+    // const data = useExtractCodeBlocksFromMarkdown(response?.content);
+    // const [data, setData] = useState<string>();
+    // useEffect(() => {
+    //     console.log('response', response)
+    //     if (response && response.content) {
+    //         setData(extractOneBlockFromMarkdown(response.content).content);
+    //     }
+    // }, [response]);
     return (
         <ScrollArea className='min-h-full w-full'>
+            {response && <Mermaid chart={extractOneBlockFromMarkdown(response.content).content} />}
             <ul className=''>
                 {messages.map((m, index) => (
                     <li key={index} className='w-full p-4 bg-gray-100'>
                         <p className='bg-black text-white pl-4'>
                             {m.role === 'user' ? 'User: ' : 'Crystal: '}
                         </p>
-                        {m.role === 'user' ?
+                        {m.role === 'user' && <p className='pl-4'>{m.content}</p>}
+                        {/* {m.role === 'user' ?
                             <div className='pl-4'>{m.content}</div>
                             :
                             <>
-                                {data &&
-                                    <Mermaid chart={data} />}
+                                {data && <Mermaid chart={data[0].content} />}
                             </>
-
-                        }
+                        } */}
                     </li>
                 ))}
             </ul>
